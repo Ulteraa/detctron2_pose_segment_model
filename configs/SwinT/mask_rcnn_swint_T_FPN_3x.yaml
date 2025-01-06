@@ -1,0 +1,31 @@
+_BASE_: "../Base-Keypoint-RCNN-FPN.yaml"
+MODEL:
+  WEIGHTS: "/home/fariborz_taherkhani/SwinT_detectron2-main_one_package_freeze_second_v/output/model_0459999.pth"
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.12, 57.375]
+  MASK_ON: True
+  RESNETS:
+    DEPTH: 50
+  BACKBONE:
+    NAME: "build_swint_fpn_backbone"
+  SWINT:
+    OUT_FEATURES: ["stage2", "stage3", "stage4", "stage5"]
+  FPN:
+    IN_FEATURES: ["stage2", "stage3", "stage4", "stage5"]
+
+INPUT:
+  FORMAT: "RGB"
+SOLVER:
+  STEPS: (420000, 500000)
+  MAX_ITER: 540000
+  WEIGHT_DECAY: 0.05
+  BASE_LR: 0.00001
+  AMP:
+    ENABLED: False 
+TEST:
+  EVAL_PERIOD: 20000 
+  KEYPOINT_OKS_SIGMAS: [0.026,   0.025, 0.025,  0.035,  0.035,  0.079,  0.079,  0.072,   0.072,  0.062,  0.062,  0.107, 0.107, 0.087, 0.087, 0.089,  0.089]
+
+DATASETS:
+  TRAIN: ("experiment",)
+  TEST: ("experiment_test",)
